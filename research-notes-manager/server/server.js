@@ -13,6 +13,7 @@ connectDB();
 const allowedOrigins = [
   'http://localhost:3000',
   'https://task-pink-two-46.vercel.app',
+  'https://task-m5h5.vercel.app',
 ];
 
 if (process.env.CLIENT_URL) {
