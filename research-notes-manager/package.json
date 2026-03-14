@@ -1,0 +1,13 @@
+{
+  "name": "research-notes-manager",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm start --prefix server",
+    "dev": "npm run dev --prefix server",
+    "install-server": "npm install --prefix server",
+    "install-client": "npm install --prefix client",
+    "build-client": "npm run build --prefix client",
+    "setup": "npm run install-server && npm run install-client && npm run build-client"
+  }
+}

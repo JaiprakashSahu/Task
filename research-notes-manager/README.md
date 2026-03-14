@@ -1,61 +1,121 @@
 # Research Notes Manager
 
-A simple full-stack MERN application for managing research notes.
-Allows users to create notes with a title, description, and tags, and filter through them easily. 
+A full-stack MERN app for creating and filtering research notes with tags.
 
 ## Tech Stack
-- **Frontend**: React, Axios
-- **Backend**: Node.js, Express
-- **Database**: MongoDB (Mongoose)
 
-## Local Development Setup
+- **Frontend** — React, Axios
+- **Backend** — Node.js, Express
+- **Database** — MongoDB (Mongoose)
 
-### 1. Database
-Make sure you have MongoDB running locally on port 27017, or update the `MONGO_URI` in the backend `.env` file.
+## Project Structure
 
-### 2. Backend
+```
+research-notes-manager/
+├── package.json                  # root scripts
+├── client/                       # React frontend
+│   ├── package.json
+│   ├── public/
+│   │   └── index.html
+│   └── src/
+│       ├── index.js
+│       ├── index.css
+│       ├── App.js
+│       ├── App.css
+│       ├── components/
+│       │   └── NoteCard.js
+│       ├── pages/
+│       │   └── HomePage.js
+│       └── services/
+│           └── api.js
+└── server/                       # Express backend
+    ├── package.json
+    ├── server.js
+    ├── config/
+    │   └── db.js
+    ├── controllers/
+    │   └── noteController.js
+    ├── models/
+    │   └── noteModel.js
+    ├── routes/
+    │   └── noteRoutes.js
+    └── middleware/
+```
+
+## Local Development
+
+**Prerequisites:** Node.js 18+ and MongoDB (local or Atlas).
+
 ```bash
-cd backend
-npm install
+# 1. install dependencies
+npm run install-server
+npm run install-client
+
+# 2. configure environment
+cp server/.env.example server/.env
+# edit server/.env — set your MONGO_URI
+
+# 3. start the backend (port 5000)
+cd server
+npm run dev
+
+# 4. in a new terminal, start the frontend (port 3000)
+cd client
 npm start
 ```
-The server will start on port 5000 by default. Set up a `.env` file based on `.env.example`.
 
-### 3. Frontend
-```bash
-cd frontend
-npm install
-npm start
-```
-The React app will open on port 3000. Set the `REACT_APP_API_URL` in your `.env` file if needed.
+The React app uses `REACT_APP_API_URL` to reach the API (defaults to `http://localhost:5000`).
 
 ---
 
-## Deployment Guide (Production)
+## Deployment
 
-This project is structured to be easily deployed to modern cloud platforms.
+### Database — MongoDB Atlas
 
-### 1. MongoDB Atlas (Database)
-1. Create a free cluster on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
-2. Create a database user and allow access from anywhere (`0.0.0.0/0`).
-3. Copy your connection string (e.g., `mongodb+srv://<user>:<password>@cluster0.../research_notes`).
+1. Create a free cluster at [mongodb.com/atlas](https://www.mongodb.com/cloud/atlas).
+2. Create a database user and whitelist `0.0.0.0/0` for access.
+3. Copy the connection string.
 
-### 2. Render (Backend)
-1. Push your code to GitHub.
-2. Go to [Render](https://render.com/) and create a new **Web Service**.
-3. Point it to your repository and set the Root Directory to `backend`.
-4. Build Command: `npm install`
-5. Start Command: `node server.js`
-6. Add these Environment Variables to the Render service:
-   - `MONGO_URI`: (Your MongoDB Atlas connection string)
-   - `CLIENT_URL`: (The URL of your frontend after it's deployed, e.g., `https://my-frontend.vercel.app`)
+### Backend — Render (Web Service)
 
-### 3. Vercel (Frontend)
-1. Go to [Vercel](https://vercel.com/) and Import your GitHub project.
-2. Set the Root Directory to `frontend`.
-3. Vercel will automatically detect Create React App settings (`npm run build`).
-4. Add this Environment Variable in Vercel settings before deploying:
-   - `REACT_APP_API_URL`: (The URL of your deployed Render backend, e.g., `https://my-backend.onrender.com`)
-5. Click **Deploy**.
+| Setting         | Value              |
+| --------------- | ------------------ |
+| Root Directory  | `server`           |
+| Build Command   | `npm install`      |
+| Start Command   | `npm start`        |
 
-Once the frontend is live, make sure to update the `CLIENT_URL` on your Render backend if you didn't have the Vercel URL beforehand.
+**Environment variables on Render:**
+
+| Variable     | Value                                      |
+| ------------ | ------------------------------------------ |
+| `MONGO_URI`  | Your Atlas connection string               |
+| `CLIENT_URL` | Your deployed frontend URL                 |
+| `NODE_ENV`   | `production`                               |
+
+### Frontend — Vercel (or Render Static Site)
+
+| Setting         | Value              |
+| --------------- | ------------------ |
+| Root Directory  | `client`           |
+| Build Command   | `npm install && npm run build` |
+| Publish / Output| `build`            |
+
+**Environment variables on Vercel:**
+
+| Variable              | Value                                   |
+| --------------------- | --------------------------------------- |
+| `REACT_APP_API_URL`   | Your Render backend URL (e.g. `https://your-api.onrender.com`) |
+
+After the frontend is live, update `CLIENT_URL` on your Render backend to match the frontend URL.
+
+### Alternative — Single Render Deployment
+
+You can also serve both from one Render service:
+
+| Setting         | Value                                                              |
+| --------------- | ------------------------------------------------------------------ |
+| Root Directory  | *(leave empty)*                                                    |
+| Build Command   | `npm run install-server && npm run install-client && npm run build-client` |
+| Start Command   | `npm start`                                                        |
+
+Set `NODE_ENV=production` so Express serves the React build automatically.
