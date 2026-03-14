@@ -23,11 +23,14 @@ app.get('/health', (_req, res) => {
 
 app.use('/notes', noteRoutes);
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
+const fs = require('fs');
+const clientBuild = path.join(__dirname, '..', 'client', 'build');
+
+if (process.env.NODE_ENV === 'production' && fs.existsSync(clientBuild)) {
+  app.use(express.static(clientBuild));
 
   app.get('*', (_req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
+    res.sendFile(path.join(clientBuild, 'index.html'));
   });
 }
 
