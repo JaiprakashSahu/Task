@@ -10,9 +10,18 @@ const PORT = process.env.PORT || 5000;
 
 connectDB();
 
-const allowedOrigins = process.env.CLIENT_URL
-  ? process.env.CLIENT_URL.split(',')
-  : ['http://localhost:3000'];
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://task-pink-two-46.vercel.app',
+];
+
+if (process.env.CLIENT_URL) {
+  process.env.CLIENT_URL.split(',').forEach((url) => {
+    if (!allowedOrigins.includes(url.trim())) {
+      allowedOrigins.push(url.trim());
+    }
+  });
+}
 
 app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
