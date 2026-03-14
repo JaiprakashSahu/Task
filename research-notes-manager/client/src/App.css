@@ -1,0 +1,129 @@
+/* ── Global ── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f5f7fa;
+  color: #333;
+}
+
+/* ── App Container ── */
+.app {
+  max-width: 640px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.app h1 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 1.8rem;
+  color: #1a1a2e;
+}
+
+/* ── Form ── */
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.note-form input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.note-form input:focus {
+  border-color: #4361ee;
+}
+
+.note-form button {
+  padding: 10px;
+  background: #4361ee;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.note-form button:hover {
+  background: #3a56d4;
+}
+
+/* ── Filter ── */
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.filter-section input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.filter-section input:focus {
+  border-color: #4361ee;
+}
+
+/* ── Notes List ── */
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.empty-msg {
+  text-align: center;
+  color: #888;
+  padding: 20px 0;
+}
+
+.note-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  transition: box-shadow 0.2s;
+}
+
+.note-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.note-card h3 {
+  margin-bottom: 6px;
+  font-size: 1.1rem;
+  color: #1a1a2e;
+}
+
+.note-card p {
+  margin-bottom: 8px;
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.tag {
+  display: inline-block;
+  background: #e8ecff;
+  color: #4361ee;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
