@@ -1,118 +1,61 @@
 # Research Notes Manager
 
-A minimal full-stack web application that allows users to add, view, and filter research notes by tag.
+A simple full-stack MERN application for managing research notes.
+Allows users to create notes with a title, description, and tags, and filter through them easily. 
 
 ## Tech Stack
+- **Frontend**: React, Axios
+- **Backend**: Node.js, Express
+- **Database**: MongoDB (Mongoose)
 
-| Layer    | Technology          |
-|----------|---------------------|
-| Frontend | React (CRA)         |
-| Backend  | Node.js + Express   |
-| Database | MongoDB + Mongoose  |
-| HTTP     | Axios               |
+## Local Development Setup
 
-## Project Structure
+### 1. Database
+Make sure you have MongoDB running locally on port 27017, or update the `MONGO_URI` in the backend `.env` file.
 
-```
-research-notes-manager/
-├── server/
-│   ├── models/
-│   │   └── Note.js          # Mongoose schema
-│   ├── server.js             # Express server & API routes
-│   └── package.json
-├── client/
-│   ├── src/
-│   │   ├── App.js            # React UI (form, list, filter)
-│   │   └── App.css           # Styling
-│   └── package.json
-└── README.md
-```
-
-## Prerequisites
-
-- **Node.js** (v16+)
-- **MongoDB** running locally on the default port (`mongodb://127.0.0.1:27017`)
-
-## Installation
-
-### 1. Backend
-
+### 2. Backend
 ```bash
-cd research-notes-manager/server
+cd backend
 npm install
-```
-
-### 2. Frontend
-
-```bash
-cd research-notes-manager/client
-npm install
-```
-
-## Running the App
-
-### 1. Start MongoDB
-
-Make sure MongoDB is running. On most systems:
-
-```bash
-mongod
-```
-
-### 2. Start the Backend
-
-```bash
-cd research-notes-manager/server
-node server.js
-```
-
-Server runs at **http://localhost:5000**
-
-### 3. Start the Frontend
-
-```bash
-cd research-notes-manager/client
 npm start
 ```
+The server will start on port 5000 by default. Set up a `.env` file based on `.env.example`.
 
-React app opens at **http://localhost:3000**
-
-## API Endpoints
-
-| Method | Endpoint       | Description                  |
-|--------|----------------|------------------------------|
-| POST   | `/notes`       | Create a new note            |
-| GET    | `/notes`       | Get all notes                |
-| GET    | `/notes?tag=AI`| Get notes filtered by tag    |
-
-## Architecture
-
+### 3. Frontend
+```bash
+cd frontend
+npm install
+npm start
 ```
-React (port 3000)  ──Axios──▶  Express (port 5000)  ──Mongoose──▶  MongoDB
-```
-
-1. **React** renders the UI, manages state with `useState`, and triggers API calls with `useEffect`.
-2. **Axios** sends HTTP requests (`GET` / `POST`) to the Express backend.
-3. **Express** handles routes, parses JSON, and uses Mongoose to read/write data.
-4. **MongoDB** stores the notes as documents in the `research_notes` database.
-
-**Filtering**: The frontend passes a `?tag=` query parameter. The backend uses a case-insensitive regex to match notes. Notes are refetched automatically whenever the filter input changes.
+The React app will open on port 3000. Set the `REACT_APP_API_URL` in your `.env` file if needed.
 
 ---
 
-## Interview Explanation
+## Deployment Guide (Production)
 
-### Why React?
-React's component-based architecture and hooks (`useState`, `useEffect`) make it fast to build interactive UIs with minimal boilerplate. Functional components keep the code clean and testable.
+This project is structured to be easily deployed to modern cloud platforms.
 
-### Why Express?
-Express is the de-facto standard for Node.js REST APIs. It's lightweight, well-documented, and provides simple middleware composition (CORS, JSON parsing) with minimal setup.
+### 1. MongoDB Atlas (Database)
+1. Create a free cluster on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+2. Create a database user and allow access from anywhere (`0.0.0.0/0`).
+3. Copy your connection string (e.g., `mongodb+srv://<user>:<password>@cluster0.../research_notes`).
 
-### Why MongoDB?
-MongoDB's flexible document model is a natural fit for note-like data that doesn't require rigid relational schemas. Mongoose adds schema validation and a clean API on top.
+### 2. Render (Backend)
+1. Push your code to GitHub.
+2. Go to [Render](https://render.com/) and create a new **Web Service**.
+3. Point it to your repository and set the Root Directory to `backend`.
+4. Build Command: `npm install`
+5. Start Command: `node server.js`
+6. Add these Environment Variables to the Render service:
+   - `MONGO_URI`: (Your MongoDB Atlas connection string)
+   - `CLIENT_URL`: (The URL of your frontend after it's deployed, e.g., `https://my-frontend.vercel.app`)
 
-### How does API communication work?
-The React frontend uses Axios to make HTTP requests to the Express backend. `POST /notes` sends a JSON body with title, description, and tag. `GET /notes` retrieves all notes, with an optional `?tag=` query parameter for filtering. CORS middleware on the server allows cross-origin requests from port 3000 to port 5000.
+### 3. Vercel (Frontend)
+1. Go to [Vercel](https://vercel.com/) and Import your GitHub project.
+2. Set the Root Directory to `frontend`.
+3. Vercel will automatically detect Create React App settings (`npm run build`).
+4. Add this Environment Variable in Vercel settings before deploying:
+   - `REACT_APP_API_URL`: (The URL of your deployed Render backend, e.g., `https://my-backend.onrender.com`)
+5. Click **Deploy**.
 
-### How does filtering work?
-When the user types in the "Filter by Tag" input, React's `useEffect` hook detects the change and calls `GET /notes?tag=<value>`. The backend builds a case-insensitive regex from the query parameter and passes it to Mongoose's `find()`. Results update in real-time as the user types.
+Once the frontend is live, make sure to update the `CLIENT_URL` on your Render backend if you didn't have the Vercel URL beforehand.
